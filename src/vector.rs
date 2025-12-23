@@ -33,6 +33,10 @@ impl Vector {
 
         Ok(())
     }
+
+    pub fn dimensions(&self) -> usize {
+        self.data.len()
+    }
 }
 
 #[cfg(test)]
@@ -76,5 +80,12 @@ mod tests {
         let another = Vector::try_new(vec![0.1, 0.1]).expect("must be valid");
 
         assert!(one != another)
+    }
+
+    #[test]
+    fn test_dimensions() {
+        let one = Vector::try_new(vec![0.1]).expect("must be valid");
+
+        assert_eq!(one.dimensions(), 1);
     }
 }
