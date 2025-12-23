@@ -79,7 +79,7 @@ mod tests {
         let one = Vector::try_new(vec![0.1]).expect("must be valid");
         let another = Vector::try_new(vec![0.1]).expect("must be valid");
 
-        assert!(one == another)
+        assert_eq!(one, another)
     }
 
     #[test]
@@ -87,7 +87,7 @@ mod tests {
         let one = Vector::try_new(vec![0.1]).expect("must be valid");
         let another = Vector::try_new(vec![0.2]).expect("must be valid");
 
-        assert!(one != another)
+        assert_ne!(one, another)
     }
 
     #[test]
@@ -95,7 +95,7 @@ mod tests {
         let one = Vector::try_new(vec![0.1]).expect("must be valid");
         let another = Vector::try_new(vec![0.1, 0.1]).expect("must be valid");
 
-        assert!(one != another)
+        assert_ne!(one, another)
     }
 
     #[test]
