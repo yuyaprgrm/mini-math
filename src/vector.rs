@@ -13,18 +13,14 @@ pub struct Vector {
 
 impl Vector {
     pub fn try_new(data: Vec<f32>) -> Result<Vector> {
-        if data.len() == 0 {
-            return Err(VectorError::InvalidDimension);
-        }
-
         Self::validate(data.as_slice())?;
 
         Ok(Vector { data })
     }
 
     fn validate(data: &[f32]) -> Result<()> {
-        if data.iter().any(|x| x.is_nan() || x.is_infinite()) {
-            return Err(VectorError::OutOfBounds)
+        if data.len() == 0 {
+            return Err(VectorError::InvalidDimension);
         }
 
         if data.iter().any(|x| x.is_nan() || x.is_infinite()) {
