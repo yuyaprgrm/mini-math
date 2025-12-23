@@ -53,6 +53,18 @@ impl Vector {
 
         Ok(Vector { data })
     }
+
+    pub fn try_scale(&self, scalar: f32) -> Result<Vector> {
+        let mut data = vec![0.0; self.data.len()];
+
+        for i in 0..self.dimensions() {
+            data[i] = self.data[i] * scalar;
+        }
+
+        Self::validate(&data)?;
+
+        Ok(Vector { data })
+    }
 }
 
 #[cfg(test)]
@@ -129,6 +141,22 @@ mod tests {
         let one = Vector::try_new(vec![f32::MAX]).expect("must be valid");
         let another = Vector::try_new(vec![f32::MAX]).expect("must be valid");
         let result = one.try_add(&another);
+
+        assert_eq!(result.err(), Some(VectorError::OutOfBounds))
+    }
+
+    #[test]
+    fn test_scale() {
+        let one = Vector::try_new(vec![2.0]).expect("must be valid");
+        let result = one.try_scale(0.5);
+
+        assert_eq!(result.ok(), Some(Vector::try_new(vec![1.0]).unwrap()))
+    }
+
+    #[test]
+    fn test_scale_failure_on_overflow() {
+        let one = Vector::try_new(vec![f32::MAX]).expect("must be valid");
+        let result = one.try_scale(2.0);
 
         assert_eq!(result.err(), Some(VectorError::OutOfBounds))
     }
