@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum VectorError {
     InvalidDimension,
     OutOfBounds,
@@ -5,6 +6,7 @@ pub enum VectorError {
 
 pub type Result<T> = std::result::Result<T, VectorError>;
 
+#[derive(PartialEq)]
 pub struct Vector {
     data: Vec<f32>,
 }
@@ -15,11 +17,21 @@ impl Vector {
             return Err(VectorError::InvalidDimension);
         }
 
+        Self::validate(data.as_slice())?;
+
+        Ok(Vector { data })
+    }
+
+    fn validate(data: &[f32]) -> Result<()> {
         if data.iter().any(|x| x.is_nan() || x.is_infinite()) {
             return Err(VectorError::OutOfBounds)
         }
 
-        Ok(Vector { data })
+        if data.iter().any(|x| x.is_nan() || x.is_infinite()) {
+            return Err(VectorError::OutOfBounds)
+        }
+
+        Ok(())
     }
 }
 
@@ -40,5 +52,29 @@ mod tests {
     #[test]
     fn test_try_new_failure_on_zero_dimension() {
         assert!(Vector::try_new(vec![]).is_err())
+    }
+
+    #[test]
+    fn test_equals_on_same_vector() {
+        let one = Vector::try_new(vec![0.1]).expect("must be valid");
+        let another = Vector::try_new(vec![0.1]).expect("must be valid");
+
+        assert!(one == another)
+    }
+
+    #[test]
+    fn test_equals_on_different_vectors() {
+        let one = Vector::try_new(vec![0.1]).expect("must be valid");
+        let another = Vector::try_new(vec![0.2]).expect("must be valid");
+
+        assert!(one != another)
+    }
+
+    #[test]
+    fn test_equals_on_different_dimensions() {
+        let one = Vector::try_new(vec![0.1]).expect("must be valid");
+        let another = Vector::try_new(vec![0.1, 0.1]).expect("must be valid");
+
+        assert!(one != another)
     }
 }
