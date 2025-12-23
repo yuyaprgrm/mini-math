@@ -43,11 +43,9 @@ impl Vector {
             return Err(VectorError::InvalidDimension)
         }
 
-        let mut data = vec![0.0; self.data.len()];
-
-        for i in 0..self.dimensions() {
-            data[i] = self.data[i] + other.data[i];
-        }
+        let data: Vec<f32> = self.data.iter()
+            .zip(other.data.iter()).map(|(a, b)| a + b)
+            .collect();
 
         Self::validate(&data)?;
 
@@ -55,11 +53,9 @@ impl Vector {
     }
 
     pub fn try_scale(&self, scalar: f32) -> Result<Vector> {
-        let mut data = vec![0.0; self.data.len()];
-
-        for i in 0..self.dimensions() {
-            data[i] = self.data[i] * scalar;
-        }
+        let data: Vec<f32> = self.data.iter()
+            .map(|x| x * scalar)
+            .collect();
 
         Self::validate(&data)?;
 
