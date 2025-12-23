@@ -38,6 +38,10 @@ impl Vector {
         self.data.len()
     }
 
+    pub fn data(&self) -> &[f32] {
+        &self.data
+    }
+
     pub fn try_add(&self, other: &Vector) -> Result<Vector> {
         if self.dimensions() != other.dimensions() {
             return Err(VectorError::InvalidDimension)
